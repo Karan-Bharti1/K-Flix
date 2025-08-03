@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LOGO_URL } from "../utils/url";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth"; // ✅ merged into one import
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux"; // ✅ added this
+import { addUser, removeUser } from "../utils/userSlice";
+import { auth } from "../utils/firebase";
 
 const Header = ({ isLogged }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // ✅ added this
+
   const handleSignout = () => {
-    const auth = getAuth();
-    signOut(auth)
+    const authInstance = getAuth();
+    signOut(authInstance)
       .then(() => {
-        navigate("/");
+        // navigate("/");
       })
-      .catch((error) => {
-        navigate("/error")
+      .catch(() => {
+        navigate("/error");
       });
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, displayName, email } = user;
+        dispatch(addUser({ uid, displayName, email }));
+        navigate("/browse")
+      } else {
+        dispatch(removeUser());
+        navigate("/")
+      }
+    });
+  }, []);
   return (
     <div className="absolute px-8 py-2 bg-gradient-to-b from-black  z-10 w-full flex justify-between">
       <img className="w-48 mx-16 object-fit" src={LOGO_URL} />
