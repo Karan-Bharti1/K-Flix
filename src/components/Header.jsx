@@ -18,11 +18,12 @@ const Header = ({ isLogged }) => {
       })
       .catch(() => {
         navigate("/error");
+
       });
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe=onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, displayName, email } = user;
         dispatch(addUser({ uid, displayName, email }));
@@ -32,6 +33,9 @@ const Header = ({ isLogged }) => {
         navigate("/")
       }
     });
+    return ()=>{
+unsubscribe()
+    }
   }, []);
   return (
     <div className="absolute px-8 py-2 bg-gradient-to-b from-black  z-10 w-full flex justify-between">
