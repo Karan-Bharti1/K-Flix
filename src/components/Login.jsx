@@ -12,7 +12,7 @@ import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 const Login = () => {
-  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(true);
   const email = useRef(null);
   const password = useRef(null);
   const name = useRef(null);
@@ -129,7 +129,7 @@ const Login = () => {
 
         <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
           {isSignIn
-            ? "New to Netflix? Sign Up Now"
+            ? "New to K-Flix? Sign Up Now"
             : "Already registered? Sign In Now."}
         </p>
       </form>
