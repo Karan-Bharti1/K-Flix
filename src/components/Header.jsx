@@ -40,7 +40,7 @@ unsubscribe()
   return (
     <div className="absolute px-8 py-2 bg-gradient-to-b from-black  z-10 w-full flex justify-between">
       {/* <img className="w-48 mx-16 object-fit" src={LOGO_URL} /> */}
-      <h1 className="text-red-500 text-4xl w-48 ml-16 m-4 font-semibold font-mono">K-Flix</h1>
+      <h1 className="text-red-500 text-5xl  w-48 ml-16 m-4 font-semibold font-mono">K-Flix</h1>
       {isLogged && (
         <div className="text-white flex ">
           <img
