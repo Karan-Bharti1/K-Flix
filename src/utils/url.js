@@ -10,3 +10,4 @@ export const API_OPTIONS = {
   }
 };
 export const YOUTUBE_URL="https://www.youtube.com/embed/"
+export const POSTER_URL="https://image.tmdb.org/t/p/w500/"

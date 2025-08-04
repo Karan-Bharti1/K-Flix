@@ -7,7 +7,7 @@ const MainContainer = () => {
     const movies=useSelector(state=>state?.movie?.nowPlayingMovies)
     if(!movies) return
     const mainMovie=movies[0]
-    console.log(mainMovie)
+    
   return (
     <div>
         <VideoTitle mainMovie={mainMovie}/>
