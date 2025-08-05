@@ -4,8 +4,11 @@ import { useSelector } from "react-redux";
 import usePopular from "../hooks/usePopular";
 import useTopRated from "../hooks/useTopRated";
 import useUpcoming from "../hooks/useUpcoming";
+import lang from "../utils/languageConstants";
 
 const SecondaryContainer = () => {
+  const language=useSelector(state=>state?.lang?.language)
+  
   usePopular();
   useTopRated();
   useUpcoming();
@@ -16,11 +19,11 @@ const SecondaryContainer = () => {
   return (
     <div className="bg-black ">
       <div className="-mt-52 z-20 relative">
-        {movies && <VideoList title={"Now Playing"} movies={movies} />}
+        {movies && <VideoList title={lang[language].nowPlaying} movies={movies} />}
       </div>
-      {movies && <VideoList title={"Top Rated"} movies={topRated} />}
-      {movies && <VideoList title={"Adventure"} movies={upcoming} />}
-      {movies && <VideoList title={"Upcoming"} movies={popularMovies} />}
+      {movies && <VideoList title={lang[language].topRated} movies={topRated} />}
+      {movies && <VideoList title={lang[language].adventure} movies={upcoming} />}
+      {movies && <VideoList title={lang[language].upcoming} movies={popularMovies} />}
     </div>
   );
 };

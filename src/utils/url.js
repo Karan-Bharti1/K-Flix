@@ -11,3 +11,4 @@ export const API_OPTIONS = {
 };
 export const YOUTUBE_URL="https://www.youtube.com/embed/"
 export const POSTER_URL="https://image.tmdb.org/t/p/w500/"
+export const GPT_SEARCH_URL="https://cdn.pixabay.com/photo/2019/10/31/08/26/film-4591329_1280.jpg"

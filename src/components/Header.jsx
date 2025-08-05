@@ -1,15 +1,19 @@
 import React, { useEffect } from "react";
 import { LOGO_URL, PROFILE_URL } from "../utils/url";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth"; // ✅ merged into one import
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux"; // ✅ added this
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux"; // ✅ added this
 import { addUser, removeUser } from "../utils/userSlice";
 import { auth } from "../utils/firebase";
+import { toggleGPTSearchView } from "../utils/gptSlice";
+import lang, { SUPPORTED_LANGUAGES } from "../utils/languageConstants";
+import { updateLanguage } from "../utils/languageSlice";
 
 const Header = ({ isLogged }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch(); // ✅ added this
-
+  const showGpt = useSelector((state) => state?.gpt?.showGptSearch);
+  const language=useSelector(state=>state?.lang?.language)
   const handleSignout = () => {
     const authInstance = getAuth();
     signOut(authInstance)
@@ -18,40 +22,59 @@ const Header = ({ isLogged }) => {
       })
       .catch(() => {
         // navigate("/error");
-
       });
   };
 
   useEffect(() => {
-    const unsubscribe=onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, displayName, email } = user;
         dispatch(addUser({ uid, displayName, email }));
-        navigate("/browse")
+        navigate("/browse");
       } else {
         dispatch(removeUser());
-        navigate("/")
+        navigate("/");
       }
     });
-    return ()=>{
-unsubscribe()
-    }
+    return () => {
+      unsubscribe();
+    };
   }, []);
+  const handleGPTSearch = () => {
+    dispatch(toggleGPTSearchView());
+  };
+  const handleLanguageChange = (event) => {
+    dispatch(updateLanguage(event.target.value))
+  };
   return (
-    <div className="absolute px-8 py-2 bg-gradient-to-b from-black  z-10 w-full flex justify-between">
-      {/* <img className="w-48 mx-16 object-fit" src={LOGO_URL} /> */}
-      <h1 className="text-red-500 text-5xl  w-48 ml-16 m-4 font-semibold font-mono">K-Flix</h1>
+    <div className="absolute px-8 py-2 bg-gradient-to-b from-black  z-100 w-full flex justify-between">
+      <h1 className="text-red-500 text-5xl  w-48 ml-16 m-4 font-semibold font-mono">
+        K-Flix
+      </h1>
       {isLogged && (
-        <div className="text-white flex ">
-          <img
-            className="w-16 mx-2 h-16 my-4 p-2"
-            src={PROFILE_URL}
-          />
+        <div className="text-white flex my-2">
+          <select
+            className="bg-red-500/50 my-4 mx-2 rounded-lg p-2"
+            onChange={handleLanguageChange}
+          >
+            {SUPPORTED_LANGUAGES?.map((lan, i) => (
+              <option  key={i} value={lan?.identifier}>
+                {lan?.name}
+              </option>
+            ))}
+          </select>
+
           <button
-            className="my-4 mx-2 p-2 text-lg font-semibold cursor-pointer"
+            className="rounded-lg bg-red-500/50 my-4 py-0  mx-2 p-4  font-semibold cursor-pointer"
+            onClick={handleGPTSearch}
+          >
+            {!showGpt ? lang[language].gptSearch :   lang[language].browse}
+          </button>
+          <button
+            className="rounded-lg bg-red-500/50  my-4 mx-2 py-0 p-4  font-semibold cursor-pointer"
             onClick={handleSignout}
           >
-            Sign Out
+            {lang[language].signout}
           </button>
         </div>
       )}
